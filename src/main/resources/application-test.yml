@@ -1,0 +1,85 @@
+# Tomcat
+server:
+  port: 7000
+
+
+
+#EUREKA配置
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.20.61:8602/eureka/
+
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@//192.168.20.69:1521/payment2
+    username: MOBAOPAY_AUDIT
+    password: audit#4257#pay2
+#    password: VH9iwo6p3gE+ZI/QjWrFry06uvUVEid46xJs6PkhnSbstoAU9OwiOUhxq8HjDE0Hs71gC6HzkR6vhumyLIKR3g==
+    druid:
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: true
+      test-on-return: false
+      # 打开PSCache，并且指定每个连接上 Cache的大小
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+#      filter:
+#        config:
+#          enabled: true
+#      connection-properties: config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJ15OraCpSNVWMWYBinSM3nr9/mfJsx0i02s1gYQ583BjRp94yCiil8GjG152G2B0wNSZNsGdCemJ+N4QKa3LX0CAwEAAQ==
+  #  redis:
+#    database: 4
+#    password: mobo_cloud
+#    timeout: 6000
+#    cluster:
+#      nodes: 192.168.20.66:6379, 192.168.20.62:6379
+#    pool:
+#      max-active: 8
+#      min-idle: 0
+#      max-wait: -1
+  kafka:
+    bootstrap-servers: 192.168.20.62:9092, 192.168.20.66:9092, 192.168.20.67:9092
+    #消费者的配置
+    consumer:
+      group-id: mobaopay
+
+tx-lcn:
+  client:
+    manager-address: 192.168.20.61:8070, 192.168.20.62:8070
+    resource-order: 0
+  logger:
+    enabled: false
+  message:
+    netty:
+      wait-time: 5000
+  springcloud:
+    loadbalance:
+      enabled: true
+
+mybatis-plus:
+  configuration:
+    # 打印sql语句(包含查询结果集)
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+#自定义配置
+#定时任务执行IP
+dbc.taskIp: local
+#运行环境
+dbc.env: ${spring.profiles.active}
+
+

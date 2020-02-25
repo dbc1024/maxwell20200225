@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.audit.mapper.AuditMerchantCentreAccountMapper">
+    
+    <select id="checkInfoRepeat" resultType="com.mobao360.audit.entity.AuditMerchantCentreAccount">
+        SELECT
+        mca.MANAGER_EMAIL,
+        mca.MANAGER_TEL
+        FROM AUDIT_MERCHANT_CENTRE_ACCOUNT mca
+        JOIN AUDIT_EVENT event ON mca.AUDIT_EVENT_ID=event.ID
+        WHERE event.STATUS IN ('01','02')
+        AND (mca.MANAGER_EMAIL = #{managerEmail} OR mca.MANAGER_TEL = #{managerTel})
+        AND mca.CUSTOMER_NO != #{customerNo}
+    </select>
+
+    <select id="countUpdateByCustomerAndAuditEventType" resultType="int">
+        SELECT  COUNT(*) FROM
+        AUDIT_MERCHANT_CENTRE_ACCOUNT amca
+        JOIN AUDIT_EVENT ae
+        ON amca.AUDIT_EVENT_ID = ae.ID
+        WHERE  amca.CUSTOMER_NO = #{customerNo}
+        AND ae.STATUS IN ('01','02')
+        AND ae.AUDIT_EVENT_TYPE = '15'
+    </select>
+
+</mapper>

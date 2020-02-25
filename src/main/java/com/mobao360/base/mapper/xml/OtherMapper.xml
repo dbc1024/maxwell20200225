@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.base.mapper.OtherMapper">
+
+    <resultMap id="MccResult" type="java.util.HashMap">
+        <id column="ID" property="id"/>
+        <result column="MCC_CODE" property="mccCode"/>
+        <result column="KIND_CODE" property="kindCode"/>
+        <result column="FIRST_KIND" property="firstKind"/>
+        <result column="SECOND_KIND" property="secondKind"/>
+        <result column="THIRD_KIND" property="thirdKind"/>
+    </resultMap>
+    <select id="mccPageQuery" resultMap="MccResult">
+        SELECT *
+        FROM BAS_MCC mcc
+        <where>
+            <if test="mccCode != null">
+                mcc.MCC_CODE = #{mccCode}
+            </if>
+            <if test="kindCode != null">
+                and mcc.KIND_CODE = #{kindCode}
+            </if>
+            <if test="firstKind != null">
+                and mcc.FIRST_KIND like '%${firstKind}%'
+            </if>
+            <if test="secondKind != null">
+                and mcc.SECOND_KIND like '%${secondKind}%'
+            </if>
+            <if test="thirdKind != null">
+                and mcc.THIRD_KIND like '%${thirdKind}%'
+            </if>
+        </where>
+
+        <include refid="Common.sortSql"/>
+
+    </select>
+
+
+    <resultMap id="WxResult" type="java.util.HashMap">
+        <id column="ID" property="id"/>
+        <result column="KIND_CODE" property="kindCode"/>
+        <result column="FIRST_KIND" property="firstKind"/>
+        <result column="SECOND_KIND" property="secondKind"/>
+        <result column="THIRD_KIND" property="thirdKind"/>
+    </resultMap>
+    <select id="wxPageQuery" resultMap="WxResult">
+        SELECT *
+        FROM BAS_WECHAT_BUSINESS_KIND wx
+        <where>
+            <if test="kindCode != null">
+                wx.KIND_CODE = #{kindCode}
+            </if>
+            <if test="firstKind != null">
+                and wx.FIRST_KIND like '%${firstKind}%'
+            </if>
+            <if test="secondKind != null">
+                and wx.SECOND_KIND like '%${secondKind}%'
+            </if>
+            <if test="thirdKind != null">
+                and wx.THIRD_KIND like '%${thirdKind}%'
+            </if>
+        </where>
+
+        <include refid="Common.sortSql"/>
+    </select>
+
+    <resultMap id="IndustryResult" type="java.util.HashMap">
+        <id column="ID" property="id"/>
+        <result column="CODE" property="code"/>
+        <result column="NAME" property="name"/>
+        <result column="PARENT_CODE" property="parentCode"/>
+    </resultMap>
+    <select id="industryList" resultMap="IndustryResult">
+        SELECT *
+        FROM BAS_INDUSTRY_INFO industry
+        <where>
+            <if test="code != null">
+                industry.CODE = #{code}
+            </if>
+            <if test="name != null">
+                and industry.NAME like '%${name}%'
+            </if>
+        </where>
+
+    </select>
+
+
+    <resultMap id="NuccResult" type="java.util.HashMap">
+        <id column="ID" property="id"/>
+        <result column="CODE" property="code"/>
+        <result column="NAME" property="name"/>
+        <result column="PARENT_CODE" property="parentCode"/>
+    </resultMap>
+    <select id="nuccList" resultMap="NuccResult">
+        SELECT *
+        FROM BAS_NUCC_BUSINESS_KIND nucc
+        <where>
+            <if test="code != null">
+                nucc.CODE = #{code}
+            </if>
+            <if test="name != null">
+                and nucc.NAME like '%${name}%'
+            </if>
+        </where>
+    </select>
+
+
+    <resultMap id="UnionBankResult" type="java.util.HashMap">
+        <result column="UNION_BANK_NAME" property="bankName"/>
+        <result column="HEAD_UNION_BANK_NO" property="bankNo"/>
+    </resultMap>
+    <select id="headUnionBankList" resultMap="UnionBankResult">
+        SELECT bank.HEAD_UNION_BANK_NO, bank.UNION_BANK_NAME
+        FROM BAS_UNION_BANK_NUMBER bank
+        <where>
+            bank.UNION_BANK_NO = bank.HEAD_UNION_BANK_NO
+            AND bank.BANK_NO NOT IN (000,001,011,012)
+
+            <if test="bankName != null">
+                AND bank.UNION_BANK_NAME like '%${bankName}%'
+            </if>
+
+        </where>
+
+    </select>
+
+
+    <resultMap id="OpeningBankResult" type="java.util.HashMap">
+        <result column="BANK_NAME" property="bankName"/>
+        <result column="BANK_NO" property="bankNo"/>
+    </resultMap>
+    <select id="openingBankList" resultMap="OpeningBankResult">
+        SELECT DISTINCT(bank.BANK_NO), bank.BANK_NAME
+        FROM BAS_UNION_BANK_NUMBER bank
+        <where>
+            bank.BANK_NO NOT IN (000,001,011,012)
+            AND bank.BANK_NAME IS NOT NULL
+            <if test="bankName != null">
+                AND bank.BANK_NAME like '%${bankName}%'
+            </if>
+        </where>
+        ORDER BY bank.BANK_NO
+
+    </select>
+
+    <resultMap id="ProvinceResult" type="java.util.HashMap">
+        <result column="PROVINCE_CODE" property="provinceCode"/>
+        <result column="PROVINCE" property="province"/>
+    </resultMap>
+    <select id="provinceList" resultMap="ProvinceResult">
+        SELECT DISTINCT(code.PROVINCE_CODE), code.PROVINCE
+        FROM BAS_UNION_BANK_AREA_CODE code
+        ORDER BY code.PROVINCE_CODE
+
+    </select>
+
+
+    <resultMap id="CityResult" type="java.util.HashMap">
+        <result column="CITY_CODE" property="cityCode"/>
+        <result column="CITY" property="city"/>
+    </resultMap>
+    <select id="cityList" resultMap="CityResult">
+        SELECT DISTINCT(code.CITY_CODE), code.CITY
+        FROM BAS_UNION_BANK_AREA_CODE code
+        WHERE code.PROVINCE_CODE = #{provinceCode}
+        ORDER BY code.CITY_CODE
+
+    </select>
+
+    <select id="districtCodeList" resultType="java.lang.String">
+        SELECT DISTINCT(code.DISTRICT_CODE)
+        FROM BAS_UNION_BANK_AREA_CODE code
+        WHERE code.CITY_CODE = #{cityCode}
+    </select>
+
+
+    <resultMap id="BranchBankResult" type="java.util.HashMap">
+        <result column="UNION_BANK_NO" property="unionBankNo"/>
+        <result column="UNION_BANK_NAME" property="unionBankName"/>
+    </resultMap>
+    <select id="branchBankList" resultMap="BranchBankResult">
+        SELECT bank.UNION_BANK_NO, bank.UNION_BANK_NAME
+        FROM BAS_UNION_BANK_NUMBER bank
+        <where>
+            bank.BANK_NO = #{bankNo}
+            <if test="unionBankName != null">
+                AND bank.UNION_BANK_NAME like '%${unionBankName}%'
+            </if>
+            AND bank.AREA_CODE = #{cityCode}
+            <!--AND bank.AREA_CODE IN-->
+            <!--<foreach collection="areaCodeList" index="index" item="areaCode" open="(" close=")" separator=",">-->
+                <!--#{areaCode}-->
+            <!--</foreach>-->
+
+        </where>
+        ORDER BY bank.UNION_BANK_NO
+
+    </select>
+
+
+    <select id="getHeadByBranch" resultType="java.lang.String">
+        SELECT bank.HEAD_UNION_BANK_NO
+        FROM BAS_UNION_BANK_NUMBER bank
+        WHERE bank.UNION_BANK_NO = #{branchBankNo}
+    </select>
+
+
+
+
+    <resultMap id="AccountBalance" type="java.util.HashMap">
+        <result column="CURRENCY" property="ccy"/>
+        <result column="USEABLE_AMT" property="usableAmt"/>
+        <result column="CLEAR_AMT" property="balClear"/>
+        <result column="FROZEN_AMT" property="ctrAmt"/>
+        <result column="BALANCE_AMT" property="bal"/>
+    </resultMap>
+    <select id="accountBalanceList" resultMap="AccountBalance">
+        SELECT amt.CURRENCY, amt.USEABLE_AMT, amt.CLEAR_AMT, amt.FROZEN_AMT, amt.BALANCE_AMT
+        FROM OLD_MERCHANT_BALANCE amt
+        where amt.NEW_CUSTOMER_NO = #{customerNo}
+    </select>
+
+
+</mapper>

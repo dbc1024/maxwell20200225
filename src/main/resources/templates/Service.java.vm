@@ -1,0 +1,42 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import com.baomidou.mybatisplus.extension.service.IService;
+import java.io.Serializable;
+
+/**
+ * <p>
+ * $!{table.comment} service接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.serviceName} extends IService<${entity}> {
+
+    /**
+     * 新增
+     * @param ${table.entityPath}
+     * @return
+     */
+    @Override
+    boolean save(${entity} ${table.entityPath});
+	
+	/**
+     * 修改
+     * @param ${table.entityPath}
+     * @return
+     */
+    @Override
+    boolean updateById(${entity} ${table.entityPath});
+	
+	/**
+     * 删除
+     * @param id
+     * @return
+     */
+    @Override
+    boolean removeById(Serializable id);
+
+
+}

@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.mobao360</groupId>
+    <artifactId>MOBAOPAY_MAXWELL</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <description>MOBAOPAY_MAXWELL</description>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.13.RELEASE</version>
+    </parent>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Edgware.SR4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>4.1.31.Final</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>11</java.version>
+        <mybatisplus.spring.boot.version>1.0.5</mybatisplus.spring.boot.version>
+        <mybatisplus.version>3.0.3</mybatisplus.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+    </properties>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
+        <!--添加oracle本地maven依赖-->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mobo.tool</groupId>
+            <artifactId>sense-field-tool</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!--easypoi导入导出-->
+        <!--easypoi-base 导入导出的工具包,可以完成Excel导出,导入,Word的导出,Excel的导出功能-->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-base</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <!--easypoi-annotation 基础注解包,作用与实体对象上,拆分后方便maven多工程的依赖管理-->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-annotation</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.1.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.10</version>
+        </dependency>
+
+        <!-- SPRINGCLOUD相关依赖 20180929 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-ribbon</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+        </dependency>
+        <!--SPRINGBOOT相关依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>1.5.16.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--集成Swagger2 by yhq 20180719-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+        <!--解决问题的configure by yhq 20180719 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <!--辅助工具  by yhq 20180719-->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.22</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.45</version>
+        </dependency>
+        <!--数据库相关 By  杨洪权 -->
+        <!--jwt session 管理 + Redis  by 杨洪权-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>-->
+        <!--mybatis-plus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatisplus-spring-boot-starter</artifactId>
+            <version>${mybatisplus.spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatisplus.version}</version>
+        </dependency>
+        <!--集成Kafka by YHQ 20180725-->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <!--druid 连接池 By 杨洪权-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.9</version>
+        </dependency>
+        <!--配置Log4j2日志 By 杨洪权-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-web</artifactId>
+            <version>2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>3.3.6</version>
+        </dependency>
+        <!-- MONGODB add by YHQ -->
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>-->
+        <!-- QUARTZ 定时任务 add by YHQ -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>4.1.20</version>
+        </dependency>
+        <!-- 瑞士军刀 add by YHQ -->
+        <dependency>
+            <groupId>org.jodd</groupId>
+            <artifactId>jodd-core</artifactId>
+            <version>5.0.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.codingapi.txlcn</groupId>
+            <artifactId>txlcn-tc</artifactId>
+            <version>5.0.2.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.codingapi.txlcn</groupId>
+            <artifactId>txlcn-txmsg-netty</artifactId>
+            <version>5.0.2.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>io.reactivex</groupId>
+            <artifactId>rxnetty</artifactId>
+            <version>0.4.9</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+
+        <finalName>MOBAOPAY_MAXWELL</finalName>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <!--IDEA默认不编译源码文件下的xml文件，配置使其编译-->
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/mapper/**/*.xml</include>
+                </includes>
+            </resource>
+            <!--指定资源的位置-->
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+    </build>
+    <!-- 配置阿里云镜像 add by yhq 20180918 -->
+    <repositories>
+        <repository>
+            <id>aliyun-repos</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>aliyun-plugin</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+</project>

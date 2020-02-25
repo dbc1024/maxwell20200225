@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.base.mapper.DictionaryMapper">
+
+    <resultMap id="ResultAsMap" type="java.util.HashMap" >
+        <result column="NAME" property="name" />
+        <result column="VALUE" property="value" />
+    </resultMap>
+
+
+    <select id="getKeyValueListByCode" resultMap="ResultAsMap"  parameterType="java.lang.String" >
+        select
+        dic.NAME,
+        dic.VALUE
+        from BAS_DICTIONARY dic
+        left join BAS_DICTIONARY_TYPE dicType on dicType.ID = dic.DIC_TYPE_ID
+        where dicType.CODE = #{typeCode}
+    </select>
+
+
+
+    <resultMap id="PageResult" type="java.util.HashMap" >
+        <result column="TYPE_NAME" property="typeName" />
+        <result column="TYPE_CODE" property="typeCode" />
+        <result column="NAME" property="name" />
+        <result column="VALUE" property="value" />
+        <result column="REMARK" property="remark" />
+    </resultMap>
+    <select id="pageQuery" resultMap="PageResult">
+        SELECT
+        dicType.NAME AS TYPE_NAME,
+        dicType.CODE AS TYPE_CODE,
+        dic.NAME,
+        dic.VALUE,
+        dic.REMARK
+        FROM BAS_DICTIONARY dic
+        LEFT JOIN BAS_DICTIONARY_TYPE dicType ON dicType.ID = dic.DIC_TYPE_ID
+        <where>
+            <if test="dicTypeId != null">
+                dic.DIC_TYPE_ID = #{dicTypeId}
+            </if>
+            <if test="name != null">
+                AND dic.NAME LIKE '%${name}%'
+            </if>
+            <if test="remark != null">
+                AND dic.REMARK LIKE '%${remark}%'
+            </if>
+        </where>
+
+        <include refid="Common.sortSql"/>
+    </select>
+
+</mapper>

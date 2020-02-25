@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Common" >
+
+    <!--分页查询排序公用sql-->
+    <sql id="sortSql">
+        <if test="cons != null">
+            order by ${cons}
+            <choose>
+                <when test="order != null">
+                    ${order}
+                </when>
+                <otherwise>
+                    desc
+                </otherwise>
+            </choose>
+        </if>
+        <if test="cons == null">
+            order by id desc
+        </if>
+    </sql>
+
+</mapper>

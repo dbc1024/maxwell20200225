@@ -1,0 +1,61 @@
+package ${package.ServiceImpl};
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import ${package.Mapper}.${table.mapperName};
+import ${package.Entity}.${entity};
+import ${package.Service}.${table.serviceName};
+import java.io.Serializable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * <p>
+ * $!{table.comment} service实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+public class ${table.serviceImplName} extends ServiceImpl<${table.mapperName}, ${entity}> implements ${table.serviceName} {
+
+    /**
+     * 新增
+     * @param ${table.entityPath}
+     * @return
+     */
+    @Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor=Exception.class)
+    public boolean save(${entity} ${table.entityPath}){
+	
+		return super.save(${table.entityPath});
+	}
+	
+	/**
+     * 修改
+     * @param ${table.entityPath}
+     * @return
+     */
+    @Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor=Exception.class)
+    public boolean updateById(${entity} ${table.entityPath}){
+	
+		return super.updateById(${table.entityPath});
+	}
+	
+	/**
+     * 删除
+     * @param id
+     * @return
+     */
+    @Override
+	@Transactional(propagation=Propagation.REQUIRED, isolation=Isolation.READ_COMMITTED, rollbackFor=Exception.class)
+    public boolean removeById(Serializable id){
+	
+		return super.removeById(id);
+	}
+
+
+}

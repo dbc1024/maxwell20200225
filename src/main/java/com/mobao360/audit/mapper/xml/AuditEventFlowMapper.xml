@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.audit.mapper.AuditEventFlowMapper">
+
+    <select id="getNextNodeInfoByTypeAndNodeCode" resultType="com.mobao360.audit.entity.AuditEventFlow">
+        SELECT
+            rownoFlow.*
+        FROM
+            (
+                SELECT
+                    ROWNUM AS rowno,
+                    orderFlow.*
+                FROM
+                    (
+                        SELECT
+                            *
+                        FROM
+                            AUDIT_EVENT_FLOW flow
+                        WHERE
+                            flow.AUDIT_EVENT_TYPE = #{auditEventType}
+                        AND flow.NODE_CODE &gt; #{nodeCode}
+                        ORDER BY
+                            flow.NODE_CODE ASC
+                    ) orderFlow
+            ) rownoFlow
+        WHERE
+            rownoFlow.rowno = 1
+    </select>
+
+    <select id="getLastNodeInfoByTypeAndNodeCode" resultType="com.mobao360.audit.entity.AuditEventFlow">
+        SELECT
+            rownoFlow.*
+        FROM
+            (
+                SELECT
+                    ROWNUM AS rowno,
+                    orderFlow.*
+                FROM
+                    (
+                        SELECT
+                            *
+                        FROM
+                            AUDIT_EVENT_FLOW flow
+                        WHERE
+                            flow.AUDIT_EVENT_TYPE = #{auditEventType}
+                        AND flow.NODE_CODE &lt; #{nodeCode}
+                        AND flow.IF_EDIT = '0'
+                        ORDER BY
+                            flow.NODE_CODE DESC
+                    ) orderFlow
+            ) rownoFlow
+        WHERE
+            rownoFlow.rowno = 1
+
+    </select>
+
+    <select id="getMaxNodeCodeByType" resultType="java.lang.String">
+        SELECT MAX(flow.NODE_CODE) FROM AUDIT_EVENT_FLOW flow WHERE flow.AUDIT_EVENT_TYPE=#{auditEventType}
+    </select>
+
+
+</mapper>

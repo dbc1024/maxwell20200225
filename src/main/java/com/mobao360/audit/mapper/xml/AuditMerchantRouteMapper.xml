@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.audit.mapper.AuditMerchantRouteMapper">
+
+    <select id="countUpdateByCustomerAndAuditEventType" resultType="int">
+        SELECT  COUNT(*) FROM
+        AUDIT_MERCHANT_ROUTE amr
+        JOIN AUDIT_EVENT ae
+        ON amr.AUDIT_EVENT_ID = ae.ID
+        WHERE  amr.CUSTOMER_NO = #{customerNo}
+        AND ae.STATUS IN ('01','02')
+        AND ae.AUDIT_EVENT_TYPE = '09'
+    </select>
+
+</mapper>

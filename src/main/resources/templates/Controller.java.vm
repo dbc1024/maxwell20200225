@@ -1,0 +1,111 @@
+package ${package.Controller};
+
+import ${package.Entity}.${entity};
+import ${package.Service}.${table.serviceName};
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.mobao360.system.utils.DictionaryUtil;
+import com.mobao360.system.utils.MobaoPage;
+import com.mobao360.system.utils.RegexUtil;
+import com.mobao360.system.utils.Result;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import com.mobao360.base.BaseController;
+
+
+import java.util.Map;
+
+/**
+ * @author ${author}
+ * @since ${date}
+ */
+@RestController
+@RequestMapping("/${table.entityPath}")
+@Log4j2
+@Api(tags = "XX-XX")
+public class ${table.controllerName} extends BaseController {
+
+    @Autowired
+    private ${table.serviceName} ${table.entityPath}Service;
+
+
+
+    @ApiOperation("分页查询")
+    @PostMapping("/page")
+    public Result page(@RequestBody Map<String, String> params){
+
+        IPage page = ${table.entityPath}Service.page(prePageQueryPlus(params), condition(params));
+        DictionaryUtil.keyValueHandle(page);
+        MobaoPage pageResult = MobaoPage.result(page);
+
+        return Result.success(pageResult);
+    }
+
+
+    @ApiOperation("详情查询")
+    @GetMapping("/detail/{id}")
+    public Result detail(@PathVariable Long id){
+
+        ${entity} ${table.entityPath} = ${table.entityPath}Service.getById(id);
+
+        return Result.success(DictionaryUtil.keyValueHandle(${table.entityPath}));
+    }
+
+
+    @ApiOperation("新增")
+    @PostMapping("/create")
+    public Result create(@RequestBody @Validated ${entity} ${table.entityPath}, BindingResult bindingResult){
+
+        RegexUtil.beanValidate(bindingResult);
+        ${table.entityPath}Service.save(${table.entityPath});
+
+        return Result.success();
+    }
+
+
+    @ApiOperation("修改")
+    @PostMapping("/update")
+    public Result update(@RequestBody @Validated ${entity} ${table.entityPath}, BindingResult bindingResult){
+
+        RegexUtil.beanValidate(bindingResult);
+        ${table.entityPath}Service.updateById(${table.entityPath});
+
+        return Result.success();
+    }
+
+
+    @ApiOperation("删除")
+    @GetMapping("/delete/{id}")
+    public Result delete(@PathVariable Long id){
+
+        ${table.entityPath}Service.removeById(id);
+
+        return Result.success();
+    }
+
+
+
+
+    /**
+     * 查询参数预处理方法
+     */
+    private LambdaQueryWrapper condition(Map<String, String> params){
+        LambdaQueryWrapper<${entity}> wrapper = new LambdaQueryWrapper<>();
+
+        String id = params.get("id");
+
+        if(StringUtils.isNotBlank(id)){
+            wrapper.eq(${entity}::getId, id);
+        }
+
+        return wrapper;
+    }
+}
+

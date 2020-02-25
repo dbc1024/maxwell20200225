@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.audit.mapper.AuditMerchantFeeRateMapper">
+
+    <select id="countUpdateByCustomerAndAuditEventType" resultType="int">
+        SELECT  COUNT(*) FROM
+        AUDIT_MERCHANT_FEE_RATE amfr
+        JOIN AUDIT_EVENT ae
+        ON amfr.AUDIT_EVENT_ID = ae.ID
+        WHERE  amfr.CUSTOMER_NO = #{customerNo}
+        AND ae.STATUS IN ('01','02')
+        AND ae.AUDIT_EVENT_TYPE = '10'
+        <choose>
+            <when test="formalId = null or formalId == 0">
+                AND amfr.FORMAL_ID IS NULL
+            </when>
+            <otherwise>
+                AND amfr.FORMAL_ID IS Not NULL
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

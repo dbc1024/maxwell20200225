@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.audit.mapper.AuditMerchantInfoMapper">
+
+    <select id="getMaxCustomerNo" resultType="java.lang.String">
+        SELECT MAX(info.customer_no) FROM AUDIT_MERCHANT_INFO info
+    </select>
+
+    <select id="checkInfoRepeat" resultType="com.mobao360.audit.entity.AuditMerchantInfo">
+        SELECT
+        merchant.NAME,
+        merchant.CUSTOMER_NO,
+        merchant.BUSINESS_LICENCE_NO
+        FROM AUDIT_MERCHANT_INFO merchant
+        JOIN AUDIT_EVENT event ON event.ID=merchant.AUDIT_EVENT_ID
+        WHERE event.STATUS IN ('01','02')
+        AND merchant.PLATFORM_CUSTOMER_NO IS NULL
+        AND (
+        merchant.NAME = #{name}
+        OR merchant.BUSINESS_LICENCE_NO = #{businessLicenceNo}
+        )
+        <if test="customerNo != null">
+            AND merchant.CUSTOMER_NO != #{customerNo}
+        </if>
+
+    </select>
+
+    <select id="countByCustomerNoAndCAuditCAuditEventType" resultType="int">
+        SELECT  COUNT(*) FROM
+        AUDIT_MERCHANT_INFO ami
+        JOIN AUDIT_EVENT ae
+        ON ami.AUDIT_EVENT_ID = ae.ID
+        WHERE  ami.CUSTOMER_NO = #{customerNo}
+        AND ae.STATUS IN ('01','02')
+        AND ae.AUDIT_EVENT_TYPE IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")" >
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>

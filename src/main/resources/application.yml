@@ -1,0 +1,171 @@
+
+
+
+#EUREKA配置
+eureka:
+  instance:
+    #指定所在区域,ribbon选择service时相同区域的会优先通讯
+    metadata-map:
+      zone: chengdu
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+    prefer-ip-address: true
+    status-page-url: http://${spring.cloud.client.ipAddress}:${server.port}/swagger-ui.html
+    #心跳检测与持续时间
+    lease-renewal-interval-in-seconds: 4
+    lease-expiration-duration-in-seconds: 12
+  client:
+    #拉取feign调用列表，8秒更新一次
+    fetch-registry: true
+    registry-fetch-interval-seconds: 8
+
+
+spring:
+  # 环境 dev|test|prod
+  profiles:
+    active: dev
+  application:
+    name: mobaopay-maxwell
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  resources:
+    add-mappings: false
+  thymeleaf:
+    mode: LEGACYHTML5
+  kafka:
+    #生产者的配置，大部分我们可以使用默认的，这里列出几个比较重要的属性
+    producer:
+      #每批次发送消息的数量
+      batch-size: 16
+      #设置大于0的值将使客户端重新发送任何数据，一旦这些数据发送失败。注意，这些重试与客户端接收到发送错误时的重试没有什么不同。允许重试将潜在的改变数据的顺序，如果这两个消息记录都是发送到同一个partition，则第一个消息失败第二个发送成功，则第二条消息会比第一条消息出现要早。
+      retries: 2
+      #producer可以用来缓存数据的内存大小。如果数据产生速度大于向broker发送的速度，producer会阻塞或者抛出异常，以“block.on.buffer.full”来表明。这项设置将和producer能够使用的总内存相关，但并不是一个硬性的限制，因为不是producer使用的所有内存都是用于缓存。一些额外的内存会用于压缩（如果引入压缩机制），同样还有一些用于维护请求。
+      buffer-memory: 33554432
+      #key序列化方式
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    #消费者的配置
+    consumer:
+      #Kafka中没有初始偏移或如果当前偏移在服务器上不再存在时,默认区最新 ，有三个选项 【latest, earliest, none】
+      auto-offset-reset: latest
+      #是否开启自动提交
+      enable-auto-commit: true
+      #自动提交的时间间隔
+      auto-commit-interval: 100
+      #key的解码方式
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #value的解码方式
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+  #MONGODB 配置
+#  data:
+#    mongodb:
+#      uri: mongodb://mobopay:mobao360@192.168.20.1:27017/mobopay
+
+
+mybatis-plus:
+  mapper-locations: classpath:**/mapper/**/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  #  typeAliasesPackage: com.mobao360.module.*.entity
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 1
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+    #序列接口实现类配置
+    #    key-generator: com.baomidou.mybatisplus.incrementer.OracleKeyGenerator
+    #逻辑删除配置
+    logic-delete-value: 1
+    logic-not-delete-value: 0
+    #自定义填充策略接口实现
+    #meta-object-handler: com.baomidou.springboot.xxx
+    #自定义SQL注入器
+    #sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+
+
+#日志相关配置 20180921 by yhq
+logging:
+  config: classpath:logback-boot.xml
+
+
+feign:
+#  client:
+#    config:
+#      default:
+#        connectTimeout: 1000
+#        readTimeout: 2000
+  #开启GZIP压缩
+  compression:
+    request:
+      enable: true
+      mime-types: text/xml,application/xml,application.json
+      min-request-size: 2048 #通讯传输超过此大小便会进行压缩,减少通信性能损耗
+    response:
+      enable: true
+  #feign对hystrix的支持
+  hystrix:
+    enabled: true
+
+
+#对某一路由单独进行熔断配置如下,若统一所有服务熔断配置,将下面的服务名mobaopay-thales改为default
+hystrix:
+  threadpool.default.coreSize: 150
+  command:
+    default: #feign的service指定的服务
+      coreSize: 200  #并发执行的最大线程数，默认10
+      maxQueueSize: 200  #BlockingQueue的最大队列数
+      queueSizeRejectionThreshold: 50  #即使maxQueueSize没有达到，达到queueSizeRejectionThreshold该值后，请求也会被拒绝
+      execution:
+        timeout:
+          #是否开启超时熔断
+          enabled: true
+        isolation:
+          thread:
+            #最大响应时间。开启超时熔断时：此值与ribbon.ReadTimeout取较小的值，关闭超时熔断时：取ribbon.ReadTimeout
+            timeoutInMilliseconds: 5000
+      #按失败率触发熔断的yml配置,开启超时熔断时生效,timeoutInMilliseconds>ribbon.ReadTimeout时也不生效
+      circuitBreaker.enabled: true
+      circuitBreaker.requestVolumeThreshold: 5
+      circuitBreaker.sleepWindowInMilliseconds: 10000
+      circuitBreaker.errorThresholdPercentage: 80
+
+
+
+
+#使用FeignClient配置的SERVICE可单独配置负载均衡 .若是全局统一配置,去掉mobaopay-thales
+#一般情况下 都是 ribbon 的超时时间（<）hystrix的超时时间（因为涉及到ribbon的重试机制）
+#mobaopay-thales: #因为调用每个服务的时间可能不一样,因此单独配置,若集体配置直接用ribbon.*(此处为demo,自己调用自己配置)
+ribbon:
+  ConnectTimeout: 1000 #最大连接服务等待时间
+  ReadTimeout: 5000 #最大服务响应时间,
+  OkToRetryOnAllOperations: false #只会对GET操作进行重试,改为true则为所有请求会重试,得做好防重准备
+  #重试负载均衡其他的实例最大重试次数,不包括首次调用,根据除了自身负载均衡的实例数量配置
+  #本服务最大重试次数到达上限依然异常,则会根据MaxAutoRetriesNextServer去访问其他负载均衡的服务实例
+  MaxAutoRetriesNextServer: 1
+  MaxAutoRetries: 1 #同一台实例最大重试次数,不包括首次调用
+
+
+#自定义配置 20180921 By YHQ 内部条件引用
+mobao:
+  jwt:
+    # 加密秘钥
+    secret: f4e2e52034348f86b67cde581c0f9eb5
+    # token有效时长，5小时，单位秒
+    expire: 600
+    header: token
+
+
+#兼容性配置 20180914 by yhq
+spring.session.store-type: none

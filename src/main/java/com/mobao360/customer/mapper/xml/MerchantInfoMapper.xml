@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.customer.mapper.MerchantInfoMapper">
+
+    <resultMap id="ResultAsMap" type="java.util.HashMap">
+        <id column="ID" property="id"/>
+        <result column="CUSTOMER_NO" property="customerNo"/>
+        <result column="SHORT_NAME" property="shortName"/>
+        <result column="NAME" property="name"/>
+        <result column="STATUS" property="status"/>
+        <result column="SHAREHOLDER" property="shareholder"/>
+        <result column="SHAREHOLDER_ID_NUM" property="shareholderIdNum"/>
+        <result column="LEGAL_PERSON" property="legalPerson"/>
+        <result column="LEGAL_PERSON_CERT_TYPE" property="legalPersonCertType"/>
+        <result column="LEGAL_PERSON_CERT_NUM" property="legalPersonCertNum"/>
+        <result column="LEGAL_PERSON_CERT_PERIOD_START" property="legalPersonCertPeriodStart"/>
+        <result column="LEGAL_PERSON_CERT_PERIOD_END" property="legalPersonCertPeriodEnd"/>
+        <result column="LEGAL_PERSON_SEX" property="legalPersonSex"/>
+        <result column="LEGAL_PERSON_CAREER" property="legalPersonCareer"/>
+        <result column="LEGAL_PERSON_NATIONALITY" property="legalPersonNationality"/>
+        <result column="BUSINESS_LICENCE_NO" property="businessLicenceNo"/>
+        <result column="BUSINESS_LICENCE_PERIOD_START" property="businessLicencePeriodStart"/>
+        <result column="BUSINESS_LICENCE_PERIOD_END" property="businessLicencePeriodEnd"/>
+        <result column="REGISTERED_FUND" property="registeredFund"/>
+        <result column="BUSINESS_SCOPE" property="businessScope"/>
+        <result column="CONTACT_PERSON" property="contactPerson"/>
+        <result column="CONTACT_PHONE" property="contactPhone"/>
+        <result column="ADDRESS" property="address"/>
+        <result column="ECOMMERCE_DOMAIN" property="ecommerceDomain"/>
+        <result column="ICP" property="icp"/>
+        <result column="ICP_PERIOD_START" property="icpPeriodStart"/>
+        <result column="ICP_PERIOD_END" property="icpPeriodEnd"/>
+        <result column="INDUSTRY_CODE" property="industryCode"/>
+        <result column="INDUSTRY_NAME" property="industryName"/>
+        <result column="AREA_CODE" property="areaCode"/>
+        <result column="BUSINESS_TYPE" property="businessType"/>
+        <result column="BUSINESS_TYPE_DIC" property="businessTypeDic"/>
+        <result column="BUSINESS_KIND" property="businessKind"/>
+        <result column="SALESMAN_NO" property="salesmanNo"/>
+        <result column="SALESMAN_NAME" property="salesmanName"/>
+        <result column="AGENT_NO" property="agentNo"/>
+        <result column="AGENT_NAME" property="agentName"/>
+        <result column="MERCHANT_TYPE" property="merchantType"/>
+
+        <result column="MCC_CODE" property="mccCode"/>
+        <result column="MCC_KIND_NAME" property="mccKindName"/>
+        <result column="WECHAT_BUSINESS_KIND_CODE" property="wechatBusinessKindCode"/>
+        <result column="WECHAT_BUSINESS_KIND_NAME" property="wechatBusinessKindName"/>
+        <result column="NUCC_BUSINESS_KIND_CODE" property="nuccBusinessKindCode"/>
+        <result column="NUCC_BUSINESS_KIND_NAME" property="nuccBusinessKindName"/>
+        <result column="CUP_BUSINESS_KIND" property="cupBusinessKind"/>
+        <result column="ALIPAY_BUSINESS_KIND" property="alipayBusinessKind"/>
+
+        <result column="STAFF" property="staff"/>
+        <result column="STAFF_CERT_TYPE" property="staffCertType"/>
+        <result column="STAFF_CERT_NUM" property="staffCertNum"/>
+        <result column="STAFF_CERT_PERIOD_START" property="staffCertPeriodStart"/>
+        <result column="STAFF_CERT_PERIOD_END" property="staffCertPeriodEnd"/>
+        <result column="IF_SUBMIT_CUSTOMS" property="ifSubmitCustoms"/>
+        <result column="CUSTOMS" property="customs"/>
+        <result column="CUSTOMS_REGISTER_NO" property="customsRegisterNo"/>
+        <result column="CROSS_BORDER_ENTRANCE" property="crossBorderEntrance"/>
+        <result column="EXIT_BUSINESS_MODEL" property="exitBusinessModel"/>
+        <result column="ECOMMERCE_WEBSITE_NAME" property="ecommerceWebsiteName"/>
+        <result column="LOGIN_NAME" property="loginName"/>
+        <result column="MANAGER_EMAIL" property="managerEmail"/>
+        <result column="MANAGER_TEL" property="managerTel"/>
+        <result column="MERCHANT_DOMAIN" property="merchantDomain"/>
+        <result column="MERCHANT_ATTRIBUTE" property="merchantAttribute"/>
+        <result column="CREATE_TIME" property="createTime"/>
+        <result column="UPDATE_TIME" property="updateTime"/>
+        <result column="LOCK_TIME" property="lockTime"/>
+        <result column="CANCEL_TIME" property="cancelTime"/>
+        <result column="BRANCH_NO" property="branchNo"/>
+        <result column="CONTACT_EMAIL" property="contactEmail"/>
+        <result column="CONTACT_CERT_NUM" property="contactCertNum"/>
+        <result column="CONTACT_ID_PERIOD_START" property="contactIdPeriodStart"/>
+        <result column="CONTACT_ID_PERIOD_END" property="contactIdPeriodEnd"/>
+        <result column="CUSTOMER_TEL" property="customerTel"/>
+        <result column="TRADE_CHECK" property="tradeCheck"/>
+        <result column="MERCHANT_PROPERTY" property="merchantProperty"/>
+        <result column="PLATFORM_CUSTOMER_NO" property="platformCustomerNo"/>
+        <result column="PLATFORM_CUSTOMER_NAME" property="platformCustomerName"/>
+
+
+        <result column="SETTLEMENT" property="settStatus"/>
+        <result column="CONSUME" property="tradeStatus"/>
+        <result column="LAST_TRADE_DATE" property="lastTradeDate"/>
+        <result column="LAST_OUT_DATE" property="lastOutDate"/>
+
+
+        <result column="STATUS" property="statusDic-merchant_status"/>
+        <result column="LEGAL_PERSON_CERT_TYPE" property="legalPersonCertTypeDic-certificate_type"/>
+        <result column="LEGAL_PERSON_SEX" property="legalPersonSexDic-sex"/>
+        <result column="LEGAL_PERSON_CAREER" property="legalPersonCareerDic-occupation"/>
+        <result column="LEGAL_PERSON_NATIONALITY" property="legalPersonNationalityDic-nationality"/>
+        <result column="AREA_CODE" property="areaCodeDic-area_code"/>
+        <result column="BUSINESS_KIND" property="businessKindDic-business_kind"/>
+        <result column="MERCHANT_TYPE" property="merchantTypeDic-merchant_type"/>
+        <result column="RISK_LEVEL" property="riskLevelDic-risk_level"/>
+        <result column="STAFF_CERT_TYPE" property="staffCertTypeDic-certificate_type"/>
+        <result column="CUSTOMS" property="customsDic-customs"/>
+        <result column="EXIT_BUSINESS_MODEL" property="exitBusinessModelDic-exit_business_model"/>
+        <result column="MERCHANT_ATTRIBUTE" property="merchantAttributeDic-merchant_attribute"/>
+        <result column="ALIPAY_BUSINESS_KIND" property="alipayBusinessKindDic-alipay_business_kind"/>
+        <result column="CUP_BUSINESS_KIND" property="cupBusinessKindDic-cupBusinessKind"/>
+    </resultMap>
+
+    <select id="detail" resultMap="ResultAsMap">
+        select
+        merchant.ID,
+        merchant.CUSTOMER_NO,
+        merchant.SHORT_NAME,
+        merchant.NAME,
+        merchant.STATUS,
+        merchant.SHAREHOLDER,
+        merchant.SHAREHOLDER_ID_NUM,
+        merchant.LEGAL_PERSON,
+        merchant.LEGAL_PERSON_CERT_TYPE,
+        merchant.LEGAL_PERSON_CERT_NUM,
+        merchant.LEGAL_PERSON_CERT_PERIOD_START,
+        merchant.LEGAL_PERSON_CERT_PERIOD_END,
+        merchant.LEGAL_PERSON_SEX,
+        merchant.LEGAL_PERSON_CAREER,
+        merchant.LEGAL_PERSON_NATIONALITY,
+        merchant.BUSINESS_LICENCE_NO,
+        merchant.BUSINESS_LICENCE_PERIOD_START,
+        merchant.BUSINESS_LICENCE_PERIOD_END,
+        merchant.REGISTERED_FUND,
+        merchant.BUSINESS_SCOPE,
+        merchant.CONTACT_PERSON,
+        merchant.CONTACT_CERT_NUM,
+        merchant.CONTACT_PHONE,
+        merchant.CONTACT_EMAIL,
+        merchant.ADDRESS,
+        merchant.MERCHANT_DOMAIN,
+        merchant.ICP,
+        merchant.ICP_PERIOD_START,
+        merchant.ICP_PERIOD_END,
+        merchant.INDUSTRY_CODE,
+        merchant.INDUSTRY_NAME,
+        merchant.AREA_CODE,
+        merchant.BUSINESS_TYPE,
+        merchant.BUSINESS_TYPE_DIC,
+        merchant.BUSINESS_KIND,
+        merchant.SALESMAN_NO,
+        merchant.SALESMAN_NAME,
+        merchant.AGENT_NO,
+        merchant.AGENT_NAME,
+        merchant.MERCHANT_TYPE,
+        merchant.CUSTOMER_TEL,
+
+        merchant.MCC_CODE,
+        merchant.MCC_KIND_NAME,
+        merchant.WECHAT_BUSINESS_KIND_CODE,
+        merchant.WECHAT_BUSINESS_KIND_NAME,
+        merchant.NUCC_BUSINESS_KIND_CODE,
+        merchant.NUCC_BUSINESS_KIND_NAME,
+        merchant.CUP_BUSINESS_KIND,
+        merchant.ALIPAY_BUSINESS_KIND,
+
+        merchant.LAST_TRADE_DATE,
+        merchant.LAST_OUT_DATE,
+
+        merchant.STAFF,
+        merchant.STAFF_CERT_TYPE,
+        merchant.STAFF_CERT_NUM,
+        merchant.STAFF_CERT_PERIOD_START,
+        merchant.STAFF_CERT_PERIOD_END,
+        merchant.IF_SUBMIT_CUSTOMS,
+        merchant.CUSTOMS,
+        merchant.CUSTOMS_REGISTER_NO,
+        merchant.CROSS_BORDER_ENTRANCE,
+        merchant.EXIT_BUSINESS_MODEL,
+        merchant.ECOMMERCE_WEBSITE_NAME,
+        merchant.ECOMMERCE_DOMAIN,
+        merchant.MERCHANT_ATTRIBUTE,
+        merchant.CREATE_TIME,
+        merchant.UPDATE_TIME,
+        merchant.LOCK_TIME,
+        merchant.CANCEL_TIME,
+        merchant.TRADE_CHECK,
+        merchant.BRANCH_NO,
+        merchant.MERCHANT_PROPERTY,
+        merchant.PLATFORM_CUSTOMER_NO,
+        plat.NAME AS PLATFORM_CUSTOMER_NAME,
+        config.CONSUME,
+        config.SETTLEMENT
+        from BAS_MERCHANT_INFO merchant
+        left join BAS_MERCHANT_CONFIG config on config.CUSTOMER_NO = merchant.CUSTOMER_NO
+        left join BAS_MERCHANT_INFO plat on plat.CUSTOMER_NO = merchant.PLATFORM_CUSTOMER_NO
+        where merchant.CUSTOMER_NO = #{customerNo}
+    </select>
+
+    <select id="queryAll" resultMap="ResultAsMap">
+        SELECT
+        merchant.CUSTOMER_NO,
+        merchant.NAME,
+        TO_CHAR(TO_DATE(merchant.CREATE_TIME, 'yyyy-MM-dd HH24:mi:ss'), 'yyyyMMdd')	as CREATE_TIME,
+        merchant.LEGAL_PERSON_CERT_NUM
+        FROM BAS_MERCHANT_INFO merchant
+        WHERE merchant.STATUS != '3'
+
+    </select>
+
+    <select id="pageQuery" resultMap="ResultAsMap">
+        select
+        merchant.ID,
+        merchant.CREATE_TIME,
+        merchant.CUSTOMER_NO,
+        merchant.NAME,
+        merchant.STAFF,
+        merchant.MERCHANT_TYPE,
+        merchant.STATUS,
+        merchant.AGENT_NAME,
+        merchant.SALESMAN_NAME,
+        merchant.MERCHANT_ATTRIBUTE,
+        merchant.INDUSTRY_NAME,
+        merchant.BUSINESS_TYPE,
+        merchant.BUSINESS_TYPE_DIC,
+        merchant.LOCK_TIME,
+        merchant.TRADE_CHECK,
+        merchant.CANCEL_TIME,
+        merchant.LAST_TRADE_DATE,
+        merchant.LAST_OUT_DATE,
+        merchant.LEGAL_PERSON_CERT_NUM,
+        merchant.LEGAL_PERSON,
+        merchant.CONTACT_PERSON,
+        merchant.CONTACT_PHONE,
+        merchant.MERCHANT_PROPERTY,
+        merchant.PLATFORM_CUSTOMER_NO,
+        plat.NAME AS PLATFORM_CUSTOMER_NAME,
+        config.CONSUME,
+        config.SETTLEMENT
+        from BAS_MERCHANT_INFO merchant
+        left join BAS_MERCHANT_CONFIG config on config.CUSTOMER_NO = merchant.CUSTOMER_NO
+        left join BAS_MERCHANT_INFO plat on plat.CUSTOMER_NO = merchant.PLATFORM_CUSTOMER_NO
+        <where>
+            1=1
+            <if test="customerNo != null">
+                and merchant.CUSTOMER_NO = #{customerNo}
+            </if>
+            <if test="platformCustomerNo != null">
+                and merchant.PLATFORM_CUSTOMER_NO = #{platformCustomerNo}
+            </if>
+            <if test="name != null">
+                and merchant.NAME like '%${name}%'
+            </if>
+            <if test="staff != null">
+                and merchant.STAFF like '%${staff}%'
+            </if>
+            <if test="status != null">
+                and merchant.STATUS = #{status}
+            </if>
+            <if test="merchantAttribute != null">
+                and merchant.MERCHANT_ATTRIBUTE = #{merchantAttribute}
+            </if>
+            <if test="salesmanNo != null">
+                and merchant.SALESMAN_NO = #{salesmanNo}
+            </if>
+            <if test="salesmanName != null">
+                AND merchant.SALESMAN_NAME like '%${salesmanName}%'
+            </if>
+            <if test="agentNo != null">
+                and merchant.AGENT_NO = #{agentNo}
+            </if>
+            <if test="agentName != null">
+                and merchant.AGENT_NAME = like '%${agentName}%'
+            </if>
+            <if test="legalPersonCertNum != null">
+                and merchant.LEGAL_PERSON_CERT_NUM = #{legalPersonCertNum}
+            </if>
+            <if test="legalPerson != null">
+                and merchant.LEGAL_PERSON = #{legalPerson}
+            </if>
+            <if test="merchantType != null">
+                and merchant.MERCHANT_TYPE = #{merchantType}
+            </if>
+            <if test="industryCode != null">
+                and merchant.INDUSTRY_CODE = #{industryCode}
+            </if>
+            <if test="tradeCheck != null">
+                and merchant.TRADE_CHECK = #{tradeCheck}
+            </if>
+            <if test="noTradeDate != null">
+                and(
+                (merchant.CREATE_TIME &lt; #{noTradeDate} and merchant.LAST_TRADE_DATE IS NULL)
+                OR (merchant.LAST_TRADE_DATE IS NOT NULL and ROUND (TO_NUMBER (TO_DATE(merchant.LAST_TRADE_DATE,'yyyy-MM-dd') - TO_DATE(SUBSTR(merchant.CREATE_TIME, 1, 10),'yyyy-MM-dd'))) > #{noTradeDays})
+                )
+            </if>
+            <if test="lastTradeDate != null">
+                and merchant.LAST_TRADE_DATE = #{lastTradeDate}
+            </if>
+            <if test="lastOutDate != null">
+                and merchant.LAST_OUT_DATE = #{lastOutDate}
+            </if>
+            <if test="businessType != null">
+                and merchant.BUSINESS_TYPE like CONCAT(CONCAT('%,', #{businessType}), ',%')
+            </if>
+            <if test="createTimeStart != null and createTimeEnd != null">
+                and merchant.CREATE_TIME between #{createTimeStart} and #{createTimeEnd}
+            </if>
+            <if test="lockTimeStart != null and lockTimeEnd != null">
+                and merchant.LOCK_TIME between #{lockTimeStart} and #{lockTimeEnd}
+            </if>
+            <if test="cancelTimeStart != null and cancelTimeEnd != null">
+                and merchant.CANCEL_TIME between #{cancelTimeStart} and #{cancelTimeEnd}
+            </if>
+            <if test="contactPhone != null">
+                and merchant.CONTACT_PHONE = #{contactPhone}
+            </if>
+            <if test="contactPerson != null">
+                and merchant.CONTACT_PERSON = like '%${contactPerson}%'
+            </if>
+            <choose>
+                <when test="merchantProperty != null">
+                    AND merchant.MERCHANT_PROPERTY = #{merchantProperty}
+                </when>
+                <otherwise>
+                    AND merchant.MERCHANT_PROPERTY != '3'
+                </otherwise>
+            </choose>
+
+
+
+            <if test="tradeStatus != null">
+                AND config.CONSUME = #{tradeStatus}
+            </if>
+            <if test="settStatus!= null">
+                AND config.SETTLEMENT = #{settStatus}
+            </if>
+
+
+        </where>
+
+        <include refid="Common.sortSql"/>
+
+    </select>
+
+
+    <select id="getMaxCustomerNo" resultType="long">
+        SELECT MAX(info.CUSTOMER_NO) FROM BAS_MERCHANT_INFO info
+    </select>
+
+
+
+    <resultMap id="certDuePageResult" type="java.util.HashMap">
+        <id column="ID" property="id"/>
+        <result column="NAME" property="customerName"/>
+        <result column="CUSTOMER_NO" property="customerNo"/>
+        <result column="SALESMAN_NAME" property="salesmanName"/>
+        <result column="SETTLEMENT" property="settStatus"/>
+        <result column="CONSUME" property="tradeStatus"/>
+        <result column="LEGAL_PERSON_CERT_TYPE" property="legalPersonCertType"/>
+        <result column="LEGAL_PERSON_CERT_PERIOD_END" property="legalPersonCertPeriodEnd"/>
+        <result column="BUSINESS_LICENCE_PERIOD_END" property="businessLicencePeriodEnd"/>
+        <result column="ICP_PERIOD_END" property="icpPeriodEnd"/>
+    </resultMap>
+
+    <select id="certDuePage" resultMap="certDuePageResult">
+        SELECT
+        merchant.ID,
+        merchant.NAME,
+        merchant.CUSTOMER_NO,
+        merchant.SALESMAN_NAME,
+        config.SETTLEMENT,
+        config.CONSUME,
+        merchant.LEGAL_PERSON_CERT_TYPE,
+        merchant.LEGAL_PERSON_CERT_PERIOD_END,
+        merchant.BUSINESS_LICENCE_PERIOD_END,
+        merchant.ICP_PERIOD_END
+        FROM BAS_MERCHANT_INFO merchant, BAS_MERCHANT_CONFIG config
+        <where>
+            merchant.CUSTOMER_NO = config.CUSTOMER_NO
+            <if test="customerNo != null">
+                AND merchant.CUSTOMER_NO = #{customerNo}
+            </if>
+            <if test="customerName != null">
+                AND merchant.NAME like '%${customerName}%'
+            </if>
+            <if test="salesmanName != null">
+                AND merchant.SALESMAN_NAME = #{salesmanName}
+            </if>
+            <if test="tradeStatus == 0 or tradeStatus == 1">
+                AND config.CONSUME = #{tradeStatus}
+            </if>
+            <if test="settStatus == 0 or settStatus == 1">
+                AND config.SETTLEMENT = #{settStatus}
+            </if>
+            <choose>
+                <when test="dueStartDate != null and dueEndDate != null">
+                    AND ((merchant.LEGAL_PERSON_CERT_PERIOD_END BETWEEN #{dueStartDate} and #{dueEndDate})
+                    OR (merchant.BUSINESS_LICENCE_PERIOD_END BETWEEN #{dueStartDate} and #{dueEndDate})
+                    OR (merchant.ICP_PERIOD_END BETWEEN #{dueStartDate} and #{dueEndDate})
+                    )
+                </when>
+                <otherwise>
+                    AND (merchant.LEGAL_PERSON_CERT_PERIOD_END &lt; #{dueEndDate}
+                    OR merchant.BUSINESS_LICENCE_PERIOD_END &lt; #{dueEndDate}
+                    OR merchant.ICP_PERIOD_END &lt; #{dueEndDate}
+                    )
+                </otherwise>
+            </choose>
+
+        </where>
+
+        <include refid="Common.sortSql"/>
+
+
+    </select>
+
+
+    <select id="checkDueCert" resultType="java.lang.String">
+        SELECT
+        merchant.CUSTOMER_NO
+        FROM
+        BAS_MERCHANT_INFO merchant
+        WHERE
+        merchant.STATUS = '1'
+        AND (
+        merchant.LEGAL_PERSON_CERT_PERIOD_END &lt; #{today} OR
+        merchant.BUSINESS_LICENCE_PERIOD_END &lt; #{today} OR
+        merchant.ICP_PERIOD_END &lt; #{today}
+        )
+
+    </select>
+
+
+    <update id="certDueLock">
+        UPDATE BAS_MERCHANT_INFO merchant
+        SET merchant.STATUS='2', merchant.LOCK_TIME=to_char(sysdate,'yyyy-MM-dd HH24:mi:ss')
+        WHERE merchant.CUSTOMER_NO IN
+        <foreach collection="customerNoList" index="index" item="customerNo" open="(" close=")" separator=",">
+            #{customerNo}
+        </foreach>
+
+    </update>
+
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 定义JOB对象 -->
+    <bean id="mobaoQuartz" class="com.mobao360.system.quartz.MobaoQuartz" />
+    <!-- 定义JOB DETAIL对象 -->
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 目标对象 mobaoQuartz -->
+        <property name="targetObject" >
+            <ref bean="mobaoQuartz" />
+        </property>
+        <!-- 目标方法 -->
+        <property name="targetMethod">
+            <value>read</value>
+        </property>
+    </bean>
+    <!-- 调度触发器 -->
+    <bean id="mobaoTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <!-- 指定使用Detail -->
+        <property name="jobDetail">
+            <ref bean="jobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>0/2 * * * * ?</value>
+        </property>
+    </bean>
+    <!--调度工厂-->
+    <bean id="scheduler"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <!-- 注册一道多个触发器 -->
+        <property name="triggers">
+            <list>
+                <ref bean="mobaoTrigger" />
+            </list>
+        </property>
+    </bean>
+</beans>

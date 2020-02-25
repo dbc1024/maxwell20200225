@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.channel.mapper.ChannelFeeRateMapper">
+
+    <update id="changeStatus">
+        update BAS_CHANNEL_FEE_RATE set STATUS = '1'
+        <where>
+            id in
+            <foreach collection="list" open="(" close=")" separator="," index="index" item="item">
+                #{item}
+            </foreach>
+        </where>
+    </update>
+
+    <select id="checkRepeat" resultType="Integer">
+        select count(*) from BAS_CHANNEL_FEE_RATE
+        <where>
+            <if test="cfr.formalId != null">
+                ID != #{cfr.formalId,jdbcType=VARCHAR}
+                and END_DATE IS NULL
+            </if>
+            <if test="cfr.channelCode != null">
+                and CHANNEL_CODE = #{cfr.channelCode,jdbcType=VARCHAR}
+            </if>
+            <if test="cfr.channelMerchantNo != null">
+                and CHANNEL_MERCHANT_NO = #{cfr.channelMerchantNo,jdbcType=VARCHAR}
+            </if>
+            <if test="cfr.productKind != null">
+                and PRODUCT_KIND = #{cfr.productKind,jdbcType=VARCHAR}
+            </if>
+            <if test="cfr.payType != null">
+                and PAY_TYPE = #{cfr.payType,jdbcType=VARCHAR}
+            </if>
+        </where>
+            <choose>
+                <when test=" banks != null">
+                    and BANK_CODE in
+                    <foreach collection="banks" open="(" separator="," close=")" item="bank" index="index">
+                        #{bank}
+                    </foreach>
+                </when>
+                <otherwise>
+                    and BANK_CODE IS NULL
+                </otherwise>
+            </choose>
+
+    </select>
+</mapper>

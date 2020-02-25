@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出。 -->
+<!-- monitorInterval 自动监控配置文件是否发生改变的时间间隔，如果检测到改变会进行热加载-->
+<Configuration status="INFO" monitorInterval="1800">
+    <!-- 全局属性 -->
+    <properties>
+        <!--日志文件储存的目录  -->
+        <property name="LOG_HOME">/home/maxwell/log</property>
+        <!--设定日志输出的具体格式  -->
+        <!--%-5p(日志级别) | %d(日期) | JWordpres-v1.0 | [%t(线程名称)-%T(线程号)] (%c{1.}(简化全类名):%L(行号)) | %m(日志信息)%n(换行)  -->
+        <property name="PATTERN">%-5p | %d |  mobao | [%t-%T] (%c{1.}:%L) | %m%n</property>
+        <!-- <property name="PATTERN">%d %-5p [%t-%T] (%c{1.}:%L) - %m%n</property> -->
+        <property name="CHARSET">UTF-8</property>
+    </properties>
+
+    <!--定义日志的输出路径  -->
+    <Appenders>
+        <!--输出日志到控制台  -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${PATTERN}" charset="${CHARSET}" />
+        </Console>
+        <!-- 这个会打印出所有INFO的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="INFO" fileName="${LOG_HOME}/info.log" filePattern="${LOG_HOME}/info-%d{yyyyMMdd}-%i.log.gz">
+            <!--设置日志输出的格式  -->
+            <PatternLayout pattern="${PATTERN}" charset="${CHARSET}"/>
+            <Filters>
+                <!--如果是error级别拒绝-->
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <!--如果是debug\info\warn输出-->
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <!--设置当前日志只输出ERROR级别的日志  -->
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <!-- <Filters>
+                 <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+             </Filters> -->
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50 MB" />
+                <!--设置触发时间策略的时间间隔，一天产生一个新文件 -->
+                <TimeBasedTriggeringPolicy interval="2000" modulate="true"/>
+                <!--设置每个日志文件的最大大小，单位可以为 B KB MB GB  -->
+                <!-- <SizeBasedTriggeringPolicy size="1KB"/> -->
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20000 -->
+            <DefaultRolloverStrategy max="20000"/>
+        </RollingFile>
+        <!-- 这个会打印出所有ERROR的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingFile name="ERROR" fileName="${LOG_HOME}/error.log" filePattern="${LOG_HOME}/error-%d{yyyyMMdd}-%i.log.gz">
+            <!--设置日志输出的格式  -->
+            <PatternLayout pattern="${PATTERN}" charset="${CHARSET}"/>
+            <Filters>
+                <!--如果是error级别拒绝-->
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <!--设置当前日志只输出ERROR级别的日志  -->
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <!-- <Filters>
+                 <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+             </Filters> -->
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50 MB" />
+                <!--设置触发时间策略的时间间隔，一天产生一个新文件 -->
+                <TimeBasedTriggeringPolicy interval="2000" modulate="true"/>
+                <!--设置每个日志文件的最大大小，单位可以为 B KB MB GB  -->
+                <!-- <SizeBasedTriggeringPolicy size="1KB"/> -->
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件，这里设置了20000 -->
+            <DefaultRolloverStrategy max="20000"/>
+        </RollingFile>
+    </Appenders>
+
+    <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <Loggers>
+        <!-- 3rdparty Loggers -->
+        <!-- 下面配置一些第三方包的日志过滤级别，用于避免刷屏 测试-->
+        <logger name="org.hibernate" level="INFO" />
+        <logger name="org.springframework" level="INFO" />
+        <logger name="org.apache" level="INFO" />
+        <logger name="com.alibaba" level="INFO" />
+        <logger name="druid.sql" level="INFO" />
+
+        <!--com.gomefinance包下的日志异步输出   includeLocation:包含本地信息；additivity：不继承父类的日志输出-->
+        <AsyncLogger  name="mobao" level="INFO"  includeLocation="true" additivity="false">
+            <appender-ref ref="INFO"/>
+            <appender-ref ref="ERROR"/>
+            <appender-ref ref="Console"/>
+        </AsyncLogger>
+        <!--建立一个默认的root的logger  -->
+        <root level="INFO" includeLocation="true">
+            <appender-ref ref="INFO"/>
+            <appender-ref ref="ERROR"/>
+            <appender-ref ref="Console"/>
+            <appender-ref ref="CatAppender" />
+        </root>
+    </Loggers>
+</Configuration>

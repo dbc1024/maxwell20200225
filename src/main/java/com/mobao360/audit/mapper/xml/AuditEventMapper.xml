@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mobao360.audit.mapper.AuditEventMapper">
+
+
+    <resultMap id="ResultAsMap" type="java.util.HashMap" >
+        <id column="ID" property="id" />
+        <result column="SUBJECT" property="subject" />
+        <result column="SUBJECT_CODE" property="subjectCode" />
+        <result column="AUDIT_EVENT_TYPE" property="auditEventType" />
+        <result column="NODE_CODE" property="nodeCode" />
+        <result column="NODE_NAME" property="nodeName" />
+        <result column="OPERATOR_ROLE" property="operatorRole" />
+        <result column="ROLE_NAME" property="roleName" />
+        <result column="OPERATOR_PERMISSION" property="operatorPermission" />
+        <result column="BUTTON_PERMISSION" property="buttonPermission" />
+        <result column="STATUS" property="status" />
+
+
+
+        <result column="AUDIT_MODULE" property="auditModuleDic-audit_module" />
+        <result column="AUDIT_EVENT_TYPE" property="auditEventTypeDic-audit_event_type" />
+        <result column="STATUS" property="statusDic-audit_event_status" />
+
+    </resultMap>
+
+
+
+    <select id="pageQuery" resultMap="ResultAsMap">
+        SELECT
+        event.ID,
+        event.AUDIT_MODULE,
+        event.AUDIT_EVENT_TYPE,
+        event.SUBJECT,
+        event.SUBJECT_CODE,
+        event.NODE_CODE,
+        event.STATUS,
+        flow.NODE_NAME,
+        flow.OPERATOR_ROLE,
+        flow.ROLE_NAME,
+        flow.OPERATOR_PERMISSION,
+        flow.BUTTON_PERMISSION
+        FROM
+            AUDIT_EVENT event
+        LEFT JOIN AUDIT_EVENT_FLOW flow ON flow.AUDIT_EVENT_TYPE = event.AUDIT_EVENT_TYPE
+        AND flow.NODE_CODE = event.NODE_CODE
+        <where>
+            event.STATUS != '44' AND
+            event.AUDIT_EVENT_TYPE IN (
+                SELECT DISTINCT
+                  inFlow.AUDIT_EVENT_TYPE
+                FROM
+                  AUDIT_EVENT_FLOW inFlow
+                WHERE
+                  inFlow.OPERATOR_ROLE IN
+                    <foreach collection="loginRoles" index="index" item="role" open="(" close=")" separator=",">
+                        #{role}
+                    </foreach>
+            )
+
+            <if test="auditModule != null">
+                AND event.AUDIT_MODULE = #{auditModule}
+            </if>
+            <if test="auditEventType != null">
+                AND event.AUDIT_EVENT_TYPE = #{auditEventType}
+            </if>
+            <if test="status != null">
+                AND event.STATUS = #{status}
+            </if>
+            <if test="subject != null">
+                AND event.SUBJECT like '%${subject}%'
+            </if>
+            <if test="operatorRole != null">
+                AND flow.OPERATOR_ROLE = #{operatorRole}
+            </if>
+            <if test="myRole == 1">
+                AND flow.OPERATOR_ROLE IN
+                <foreach collection="loginRoles" index="index" item="role" open="(" close=")" separator=",">
+                    #{role}
+                </foreach>
+            </if>
+
+        </where>
+
+        <include refid="Common.sortSql"/>
+    </select>
+
+
+    <select id="countDoing" resultType="int">
+        SELECT COUNT(DISTINCT event.ID)
+        FROM AUDIT_EVENT event
+        LEFT JOIN AUDIT_EVENT_FLOW flow ON flow.AUDIT_EVENT_TYPE = event.AUDIT_EVENT_TYPE
+        AND flow.NODE_CODE = event.NODE_CODE
+        WHERE event.STATUS IN ('01','02')
+        AND flow.OPERATOR_ROLE IN
+        <foreach collection="loginRoles" index="index" item="role" open="(" close=")" separator=",">
+            #{role}
+        </foreach>
+    </select>
+
+    <select id="countBySubjectCodeAndCAuditCAuditEventType" resultType="int">
+        select count(*) from AUDIT_EVENT where
+        SUBJECT_CODE = #{subjectCode}
+        and STATUS in ('01','02')
+        and AUDIT_EVENT_TYPE in
+        <foreach collection="auditEventTypes" index="index" open="(" separator="," close=")" item="auditEventType">
+            #{auditEventType}
+        </foreach>
+    </select>
+
+</mapper>
